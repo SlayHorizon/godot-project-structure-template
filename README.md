@@ -5,15 +5,15 @@
 
 This template is a starting point for organising a Godot Project. Use it as inspiration and adapt it to your preferences and needs.
 
-I created this template because I wanted a resource to share with people who asked me about structuring Godot projects.,
-but most examples I found were either too specific or simply mirrored Unity’s scenes/scripts split, which I find less practical for Godot due to duplication.
+I created this template because I wanted a resource to share with people who asked me about structuring Godot projects,
+but most examples I found were either too specific or simply mirrored Unity’s scenes/scripts split, which I find less practical for Godot due to duplication.  
 So here it is.
 
 ## Principles
 
 This project structure is based on a few principles that tend to scale well:
 
-- Group related logic together
+- Group related topics together.
 - Separate raw assets from Godot-specific files.
 - Keep structure shallow unless depth improves clarity.
 - Favor consistency across naming, file layout, and behavior.
@@ -27,12 +27,12 @@ Following them often leads to practical benefits, especially as projects grow:
 Having a clear and consistent folder structure:
 
 - Makes collaboration smoother as everyone knows where things go.
-- Speeds up onboarding for new team members
-- Helps avoid duplicated files or logic
-- Reduces time spent searching for assets or scripts
-- Scales naturally as your game grows in complexity
+- Speeds up onboarding for new team members.
+- Helps avoid duplicated files or logic.
+- Reduces time spent searching for assets or scripts.
+- Scales naturally as your game grows in complexity.
 
-Whether you’re working solo or with a team,, structure becomes invisible when it works and painful when it doesn’t.
+Whether you’re working solo or with a team, structure becomes invisible when it works and painful when it doesn’t.
 
 ---
 
@@ -83,6 +83,7 @@ features/
 │       ├── dungeon.tscn
 │       └── shop.tscn
 ├── entities/
+│   ├── entity.gd                # Base entity (class_name Entity)
 │   ├── components/
 │   │   ├── attack.gd
 │   │   └── health.gd
@@ -91,10 +92,9 @@ features/
 │   │   └── skeleton/
 │   │       ├── skeleton.gd      # Skeleton-specific logic (extends enemy.gd)
 │   │       └── skeleton.tscn
-│   ├── player/
-│   │   ├── player.gd            # Player logic (extends entity.gd)
-│   │   └── player.tscn
-│   └── entity.gd                # Base entity (class_name Entity)
+│   └── player/
+│       ├── player.gd            # Player logic (extends entity.gd)
+│       └── player.tscn
 └── item/
 	├── item.gd
 	└── resources/
@@ -146,6 +146,7 @@ autoload/
 
 ## Closing Notes
 
+- Consider all the above as a helpful foundation, not a rulebook, but a flexible starting point you can adapt. Feel free to pick and choose what works best for your needs and preferences.
 - Prefer a shallow structure where possible, it's often easier to navigate. But if more depth helps clarify ownership or logic, don't hesitate to use it.
 - The default `addons/` folder is logically separate from the main project structure as each addon is self-contained and may organize its own `assets/`, `data/`, and `source/` folders in their own way.
 - For multiplayer project examples, check out my other repos:
@@ -167,5 +168,12 @@ autoload/
 <summary>Contributing</summary>
 
 Suggestions and PRs welcome! If you have a structure that works well for your team, feel free to share it.
+
+</details>
+
+<details>
+<summary>Credits</summary>
+	
+_Thanks to Axel (from the Godot Discord) for thoughtful feedback and suggestions that helped shape this template._
 
 </details>
