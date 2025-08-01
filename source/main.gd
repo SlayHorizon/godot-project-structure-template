@@ -10,7 +10,7 @@ func _ready() -> void:
 	
 	apply_settings()
 	
-	get_tree().change_scene_to_file("res://source/main_scenes/main_menu.tscn")
+	get_tree().change_scene_to_file.call_deferred("res://source/ui/main_menu/main_menu.tscn")
 
 
 func apply_settings() -> void:

@@ -1,14 +1,40 @@
 # Godot Project Structure Template
 
-> [!NOTE]
-> **Ready-to-use Godot project template you can directly open in Godot.**  
-> Use this as inspiration, adapt the structure to your preferences and needs.
+> [!TIP]
+> **Ready-to-use Godot project template you can directly open in Godot.**
 
-A feature oriented folder structure for Godot projects, designed not only for clarity but also to make team collaboration easier.  
-I created this because I couldn't find good and simple project organization that weren't either too specific or just copying Unity's scenes/scripts split (which I dislike personally as it creates duplication).
+This template is a starting point for organising a Godot Project. Use it as inspiration and adapt it to your preferences and needs.
 
-This structure works well for most indie projects and small teams. Keep it simple, no need to overcomplicate things.
+I created this template because I wanted a resource to share with people who asked me about structuring Godot projects.,
+but most examples I found were either too specific or simply mirrored Unity’s scenes/scripts split, which I find less practical for Godot due to duplication.
+So here it is.
 
+## Principles
+
+This project structure is based on a few principles that tend to scale well:
+
+- Group related logic together
+- Separate raw assets from Godot-specific files.
+- Keep structure shallow unless depth improves clarity.
+- Favor consistency across naming, file layout, and behavior.
+- All folder and file names should use `snake_case` (recommended by the [Godot style guide](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_styleguide.html#naming-conventions)).
+
+You can adapt these principles or extend them to match your own style.  
+Following them often leads to practical benefits, especially as projects grow:
+
+## Benefits
+
+Having a clear and consistent folder structure:
+
+- Makes collaboration smoother as everyone knows where things go.
+- Speeds up onboarding for new team members
+- Helps avoid duplicated files or logic
+- Reduces time spent searching for assets or scripts
+- Scales naturally as your game grows in complexity
+
+Whether you’re working solo or with a team,, structure becomes invisible when it works and painful when it doesn’t.
+
+---
 
 ## Root Folder
 
@@ -19,32 +45,30 @@ This structure works well for most indie projects and small teams. Keep it simpl
 └── source/      # All Godot scenes, scripts, and resources
 ```
 
-The `assets/` and `data/` folders are for easy collaboration with artists, so they can add files without touching the Godot project structure.
-Some people may prefer to combine `assets/` and `data/` into a single folder. Use the structure that best fits your workflow.
+- `assets/` and `data/` allow artists and non-programmers to contribute without navigating in your code source structure.
+- You can merge `assets/` and `data/` if your team prefers.
 
 ## `source/` Folder
 
 ```bash
 source/
-├── main.tscn        # Project entry scene
-├── main.gd          # Entry script
-├── main_scenes/     # Root scenes (game, main menu, etc.)
-├── features/        # Gameplay systems (map, entities, dialogue, etc.)
-├── ui/              # Reusable UI and themes
+├── main.tscn        # Entry point of the project
+├── main.gd
+├── features/        # Gameplay systems (map, entities, etc.)
+├── ui/              # UI screens and reusable components
 │   ├── common/
 │   └── theme/
-├── utils/           # Helper scripts
 ├── autoload/        # Global managers/singletons
-└── shaders/         # Custom shaders
+├── utils/           # Optional: Helper scripts
+└── shaders/         # Optional: Godot shaders
 ```
 
 ### Project Entry Point: `main.tscn` / `main.gd`
 
-- `main.tscn` and `main.gd` at the root of `source/` serve as the **project’s entry point**.
-- Use these to perform initial checks (settings, save migration, platform-specific logic, splash screens, etc.) before loading the actual game or menu.
-- This is a common pattern I personally use in my Godot projects and helps keep startup logic separate from main scenes.
+- Use `main.tscn` and `main.gd` to perform initial checks (settings, save migration, platform-specific logic, splash screens, etc.) before loading the actual game or menu.
+> This is a common pattern I personally use in my Godot projects and helps keep startup logic separate from main scenes.
 
-### `features/` Folder
+## `features/` Folder
 
 The `features/` folder groups major gameplay systems. In smaller projects, you may choose to place these folders directly under `source/` for simplicity.
 
@@ -55,35 +79,34 @@ features/
 ├── map/
 │   ├── map.gd
 │   ├── map.tscn
-│   └── dungeon.tscn
+│   └── levels/                  # Individual map levels
+│       ├── dungeon.tscn
+│       └── shop.tscn
 ├── entities/
-│   ├── entity.gd
-│   ├── entity.tscn
-│   ├── player.gd
-│   ├── npc.gd
-│   └── enemy.gd
-└── dialogue/
-    ├── dialogue_manager.gd
-    └── dialogue_box.tscn
+│   ├── components/
+│   │   ├── attack.gd
+│   │   └── health.gd
+│   ├── enemies/
+│   │   ├── enemy.gd             # Base enemy logic (extends entity.gd)
+│   │   └── skeleton/
+│   │       ├── skeleton.gd      # Skeleton-specific logic (extends enemy.gd)
+│   │       └── skeleton.tscn
+│   ├── player/
+│   │   ├── player.gd            # Player logic (extends entity.gd)
+│   │   └── player.tscn
+│   └── entity.gd                # Base entity (class_name Entity)
+└── item/
+	├── item.gd
+	└── resources/
+		├── bow.tres
+		└── sword.tres
 ```
 
-### `main_scenes/` Folder
+- Favor clarity over minimalism: it's okay to have a few levels of nesting if it helps organize logic.
 
-These are your "whole" scenes composed from features:
+## `ui/` Folder
 
-```bash
-main_scenes/
-├── boot_screen.tscn
-├── main_menu.tscn
-├── game.tscn
-└── credits.tscn
-```
-
-> [!TIP]
-> If you use scene-per-level swapping, this folder might not be useful.  
-> The same applies if you use a single whole scene as your `main.tscn`.
-
-### `ui/` Folder
+Separate reusable components from full UI screens.
 
 ```bash
 ui/
@@ -91,21 +114,43 @@ ui/
 │   ├── button.tscn
 │   ├── popup.tscn
 │   └── panel.tscn
-└── theme/
-    ├── theme.tres
-    └── halloween.tres
+├── theme/
+│   ├── theme.tres
+│   └── halloween.tres
+├── boot_screen/
+│   └── boot_screen.tscn
+├── main_menu/
+│   ├── main_menu.gd
+│   └── main_menu.tscn
+└── inventory/
+	├── inventory.tscn
+	├── inventory.gd
+	└── item_slot.gd
+```
+
+
+## `autoload/` Folder
+
+For global managers or systems that need to be accessible from anywhere:
+
+```bash
+autoload/
+├── game_state.gd         # GameState autoload
+├── event_bus.gd          # EventBus autoload 
+└── transition_manager/   # TransitionManager autoload
+	├── transition_manager.gd
+	└── transition_manager.tscn
 ```
 
 ---
 
-## Additional Notes
+## Closing Notes
 
-- For most indie games, this structure organization is enough.
-- Keep it flat, not deep, easier to find things.
-- For multiplayer examples, check out my other repos:
+- Prefer a shallow structure where possible, it's often easier to navigate. But if more depth helps clarify ownership or logic, don't hesitate to use it.
+- The default `addons/` folder is logically separate from the main project structure as each addon is self-contained and may organize its own `assets/`, `data/`, and `source/` folders in their own way.
+- For multiplayer project examples, check out my other repos:
   - [godot-tiny-mmo](https://github.com/SlayHorizon/godot-tiny-mmo)
   - [godot-dedicated-server-example](https://github.com/SlayHorizon/godot-dedicated-server-example)
-- The default `addons/` folder is logically separate from the main project structure as each addon is self-contained and may organize its own `assets/`, `data/`, and `source/` folders in their own way.
 
 ---
 
