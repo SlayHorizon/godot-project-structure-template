@@ -1,4 +1,7 @@
+[README.fr.md](./README.fr.md) — 🇫🇷 Version française *(French version)*
+
 # Godot Project Structure Template
+> A descriptive guide abour structuring and organizing a Godot project.
 
 > [!TIP]
 > **Ready-to-use Godot project template you can directly open in Godot.**
